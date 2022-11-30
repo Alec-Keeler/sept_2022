@@ -14,12 +14,13 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // Third
 app.get('/other-resource', (req, res, next) => {
   console.log('Third');
   next();
 }, (req, res, next) => {
-  res.send('Message');
+  res.send('Banana');
 });
 
 // Fourth
@@ -43,10 +44,15 @@ app.get('/other-resource', (req, res, next) => {
   next();
 });
 
+// app.use((req, res, next) => {
+//   next('error')
+// })
+
 // Seventh
 app.use((req, res, next) => {
   console.log('Seventh');
   res.send('Message');
+  // next()
 });
 
 // Eighth
