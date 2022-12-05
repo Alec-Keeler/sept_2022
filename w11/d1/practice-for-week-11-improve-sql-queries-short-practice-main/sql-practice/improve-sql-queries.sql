@@ -4,8 +4,32 @@
 -- Query: Select all cats that have a toy with an id of 5
 
     -- Your code here
-
+SELECT cats.name FROM cats
+JOIN cat_toys ON (cats.id=cat_toys.cat_id)
+WHERE cat_toys.toy_id = 5;
 -- Paste your results below (as a comment):
+
+EXPLAIN QUERY PLAN
+SELECT cats.name FROM cats
+JOIN cat_toys ON (cats.id=cat_toys.cat_id)
+WHERE cat_toys.toy_id = 5;
+
+-- Add index
+CREATE INDEX idx_cat_toys_toy_id ON cat_toys (toy_id);
+
+
+
+-- Find all toys associated to cats with an id of 1, 5 and 10
+-- query
+EXPLAIN QUERY PLAN
+SELECT toys.name from toys
+JOIN cat_toys ON (toys.id = cat_toys.toy_id)
+where cat_toys.cat_id IN (1, 5, 10);
+-- about .003
+-- index
+CREATE INDEX idx_cat_toys_cat_id ON cat_toys(cat_id);
+-- after index, about 0.000/0.001
+
 
 
 
@@ -86,3 +110,7 @@
 ---------------------------------
 -- Notes From Further Exploration
 ---------------------------------
+
+
+
+
