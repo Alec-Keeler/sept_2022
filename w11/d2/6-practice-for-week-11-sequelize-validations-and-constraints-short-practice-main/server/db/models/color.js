@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       validate: {
+        len: {
+          args: [2, 20],
+          msg: 'name must be between 2 and 20 characters!'
+        },
         between2and20(value) {
           let len = value.length;
           if (len < 2 || len > 20) throw new Error('name must be between 2 and 20 characters!');
