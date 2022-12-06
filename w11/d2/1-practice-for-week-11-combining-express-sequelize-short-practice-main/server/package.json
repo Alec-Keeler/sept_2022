@@ -11,10 +11,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "dotenv": "^16.0.3",
+    "express": "^4.17.1",
+    "sequelize": "^6.26.0",
+    "sequelize-cli": "^6.5.2"
   },
   "devDependencies": {
     "dotenv-cli": "^5.1.0",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "sqlite3": "^5.1.2"
   }
 }

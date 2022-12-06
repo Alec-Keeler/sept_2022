@@ -9,10 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(50)
       },
       weight: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT(4,1)
       }
     })
   },
