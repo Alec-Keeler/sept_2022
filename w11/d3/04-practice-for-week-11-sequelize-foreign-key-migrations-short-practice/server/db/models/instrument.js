@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const musician = require('./musician');
 module.exports = (sequelize, DataTypes) => {
   class Instrument extends Model {
     /**
@@ -11,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Your code here
+      Instrument.belongsToMany(models.Musician, {
+        through: models.MusicianInstrument,
+        foreignKey: 'instrumentId',
+        otherKey: 'musicianId'
+      });
     }
   };
   Instrument.init({
