@@ -11,12 +11,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Your code here
+<<<<<<< HEAD
       Band.hasMany(models.Musician,
         {
           foreignKey: 'bandId',
           onDelete: 'CASCADE',
           hooks: true
         });
+=======
+      Band.hasMany( models.Musician,{
+          foreignKey: "bandId",
+          onDelete: "CASCADE",
+          hooks: true
+        }
+      )
+>>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
     }
   };
   Band.init({
@@ -24,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true
-    }
+    },
+
   }, {
     sequelize,
     modelName: 'Band',

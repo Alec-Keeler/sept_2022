@@ -9,8 +9,12 @@ require('dotenv').config();
 const { Puppy } = require('./db/models');
 
 // Import Op to perform comparison operations in WHERE clauses - DO NOT MODIFY
+<<<<<<< HEAD
 const { Op } = require("sequelize");
 // const { UPSERT } = require('sequelize/types/lib/query-types');
+=======
+// const { Op } = require("sequelize");
+>>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
 
 // Express using json - DO NOT MODIFY
 app.use(express.json());
@@ -24,8 +28,13 @@ app.get('/puppies', async (req, res, next) => {
 
     // Your code here
     allPuppies = await Puppy.findAll({
+<<<<<<< HEAD
       order: ['name']
     });
+=======
+        order: ['name']
+    })
+>>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
 
     res.json(allPuppies);
 });
@@ -39,10 +48,17 @@ app.get('/puppies/chipped', async (req, res, next) => {
 
     // Your code here
     chippedPuppies = await Puppy.findAll({
+<<<<<<< HEAD
       where: {
         microchipped: true,
       },
       order: ['age_yrs']
+=======
+        where: {
+            microchipped: true
+        },
+        order: [['age_yrs', 'DESC'], ['name']]
+>>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
     })
 
     res.json(chippedPuppies);
@@ -54,6 +70,7 @@ app.get('/puppies/chipped', async (req, res, next) => {
 // Finding one record by attribute
 app.get('/puppies/name/:name', async (req, res, next) => {
     let puppyByName;
+<<<<<<< HEAD
 
     // Your code here
     puppyByName = await Puppy.findOne({
@@ -61,10 +78,20 @@ app.get('/puppies/name/:name', async (req, res, next) => {
         name: req.params.name
       }
     })
+=======
+    const { name } = req.params
+    // Your code here
+    puppyByName = await Puppy.findOne({
+        where: {
+            name: name
+        }
+    });
+>>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
 
     res.json(puppyByName);
 })
 
+const { Op } = require('sequelize') //needed for bonus
 
 // BONUS STEP 5
 // All puppies with breed ending in 'Shepherd'
@@ -73,6 +100,14 @@ app.get('/puppies/shepherds', async (req, res, next) => {
     let shepherds;
 
     // Your code here
+    shepherds = await Puppy.findAll({
+        where: {
+            breed: {
+                [Op.like]: "%Shepherd"
+            }
+        },
+        order: [["name", "DESC"]]
+    })
 
     res.json(shepherds);
 })
@@ -85,6 +120,17 @@ app.get('/puppies/tinybabies', async (req, res, next) => {
     let tinyBabyPuppies;
 
     // Your code here
+    tinyBabyPuppies = await Puppy.findAll({
+        where: {
+            age_yrs: {
+                [Op.lt]: 1
+            },
+            weight_lbs: {
+                [Op.lt]: 20
+            }
+        },
+        order: [['age_yrs'], ['weight_lbs']]
+    })
 
     res.json(tinyBabyPuppies);
 })
@@ -97,7 +143,11 @@ app.get('/puppies/:id', async (req, res, next) => {
     let puppyById;
 
     // Your code here
+<<<<<<< HEAD
     puppyById = await Puppy.findByPk(req.params.id);
+=======
+    puppyById = await Puppy.findByPk(req.params.id)
+>>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
 
     res.json(puppyById);
 });
@@ -111,5 +161,9 @@ app.get('/', (req, res) => {
 });
 
 // Set port and listen for incoming requests - DO NOT MODIFY
+<<<<<<< HEAD
 const port = 5000;
+=======
+const port = 5001;
+>>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
 app.listen(port, () => console.log('Server is listening on port', port));

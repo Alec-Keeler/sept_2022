@@ -22,6 +22,7 @@ const { Puppy } = require('./db/models');
   // breed: Brittany Spaniel
   // microchipped: false
   try {
+<<<<<<< HEAD
     // Your code here
     const newPuppy = Puppy.build({
       name: 'Trudy',
@@ -32,6 +33,18 @@ const { Puppy } = require('./db/models');
     });
     await newPuppy.save();
 
+=======
+    const newPuppy = Puppy.build(
+      {
+        name: 'Trudy',
+        age_yrs: 2,
+        weight_lbs: 38,
+        breed: 'Brittany Spaniel',
+        microchipped: false
+      }
+    );
+    await newPuppy.save();
+>>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
   } catch (err) {
     console.error(err)
   }
@@ -44,8 +57,10 @@ const { Puppy } = require('./db/models');
   // weight_lbs: 42
   // breed: Bulldog
   // microchipped: true
+  // Your code here
   try {
     // Your code here
+<<<<<<< HEAD
     const newPuppy = Puppy.create({
       name: "Beans",
       age_yrs: 1.6,
@@ -53,8 +68,21 @@ const { Puppy } = require('./db/models');
       breed: "Bulldog",
       microchipped: true
     });
+=======
+    const newPup2 = await Puppy.create({
+      name: 'Beans',
+      age_yrs: 1.6,
+      weight_lbs: 42,
+      breed: 'Bulldog',
+      microchipped: true
+    })
+>>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
   } catch (err) {
     console.error(err)
   }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
 })();
