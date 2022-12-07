@@ -16,12 +16,16 @@ module.exports = (sequelize, DataTypes) => {
   Color.init({
     name: {
       type: DataTypes.STRING,
-      unique: true,
-      allowNull: false
+      allowNull: false,
+      unique: true
     }
   }, {
     sequelize,
     modelName: 'Color',
   });
   return Color;
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> b8061f29ff053c20086ae43202f4a0c9bb73262d
