@@ -60,7 +60,7 @@ app.get('/bands-eager', async (req, res, next) => {
     const payload = await Band.findAll({
         // Your code here
         include: {model: Musician},
-        order: [[Musician, 'firstName']]
+        order: [['name'],[Musician, 'firstName']]
     });
     res.json(payload);
 });
