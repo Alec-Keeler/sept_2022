@@ -25,6 +25,23 @@ app.get('/puppies', async (req, res, next) => {
 // Respond to the request by sending a success message
 app.post('/puppies', async (req, res, next) => {
     // Your code here
+    const newPuppy = await Puppy.build({
+      name: req.body.name,
+      age_yrs: req.body.age_yrs,
+      breed: req.body.breed,
+      weight_lbs: req.body.weight_lbs,
+      microchipped: req.body.microchipped
+    });
+    await newPuppy.save();
+    res.json({
+      message: "Record Successfully Saved",
+      name: req.body.name,
+      age_yrs: req.body.age_yrs,
+      breed: req.body.breed,
+      weight_lbs: req.body.weight_lbs,
+      microchipped: req.body.microchipped
+    });
+
 })
 
 
