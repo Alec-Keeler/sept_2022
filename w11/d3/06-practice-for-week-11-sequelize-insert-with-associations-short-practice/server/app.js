@@ -17,6 +17,7 @@ app.use(express.json());
 app.post('/bands/:bandId/musicians', async (req, res, next) => {
     // Your code here
     const { bandId } = req.params;
+<<<<<<< HEAD
     const band = await Band.findByPk(bandId);
     const {firstName, lastName} = req.body;
     const musician = await band.createMusician({firstName, lastName});
@@ -24,11 +25,27 @@ app.post('/bands/:bandId/musicians', async (req, res, next) => {
       message: `Created new musician for the band ${band.name}`,
       musician
     });
+=======
+    const band = await Band.findByPk(bandId)
+    const { firstName, lastName } = req.body
+    // const firstName = req.body.firstName;
+    // const lastName = req.body.lastName;
+
+    const musician = await band.createMusician({
+        firstName,
+        lastName
+    })
+    res.json({
+        message: `Created new musician for the band ${band.name}`,
+        musician
+    })
+>>>>>>> 8e3e87905ce925aa28871594992fec446d7daf33
 })
 
 // STEP 2: Connecting two existing records (Many-to-Many)
 app.post('/musicians/:musicianId/instruments', async (req, res, next) => {
     // Your code here
+<<<<<<< HEAD
     const {instrumentIds} = req.body;
     const musician = await Musician.findByPk(req.params.musicianId);
 
@@ -37,6 +54,17 @@ app.post('/musicians/:musicianId/instruments', async (req, res, next) => {
     res.json({
       message: `Successfully added instruments with an id of ${req.body.instrumentIds} to Musician, ${musician.firstName}`
     });
+=======
+    const { instrumentIds } = req.body
+    const musician = await Musician.findByPk(req.params.musicianId);
+
+    await musician.addInstruments(instrumentIds)
+
+    res.json({
+        message: `Successfully added instruments with an id of
+        ${req.body.instrumentIds} to Musician, ${musician.firstName}`
+    })
+>>>>>>> 8e3e87905ce925aa28871594992fec446d7daf33
 })
 
 
@@ -52,7 +80,11 @@ app.get('/bands/:bandId', async (req, res, next) => {
 // Get the details all bands and associated musicians - DO NOT MODIFY
 app.get('/bands', async (req, res, next) => {
     const payload = await Band.findAll({
+<<<<<<< HEAD
         include: {model: Musician},
+=======
+        include: { model: Musician },
+>>>>>>> 8e3e87905ce925aa28871594992fec446d7daf33
         order: [['name'], [Musician, 'firstName']]
     });
     res.json(payload);
@@ -61,7 +93,7 @@ app.get('/bands', async (req, res, next) => {
 // Get the details of one musician and associated instruments - DO NOT MODIFY
 app.get('/musicians/:musicianId', async (req, res, next) => {
     const payload = await Musician.findByPk(req.params.musicianId, {
-        include: {model: Instrument},
+        include: { model: Instrument },
         order: [[Instrument, 'type']]
     });
     res.json(payload);
@@ -84,5 +116,9 @@ app.get('/', (req, res) => {
 });
 
 // Set port and listen for incoming requests - DO NOT MODIFY
+<<<<<<< HEAD
 const port = 5000;
+=======
+const port = 5001;
+>>>>>>> 8e3e87905ce925aa28871594992fec446d7daf33
 app.listen(port, () => console.log('Server is listening on port', port));
