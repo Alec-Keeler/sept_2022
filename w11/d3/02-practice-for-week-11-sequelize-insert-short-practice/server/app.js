@@ -12,7 +12,7 @@ const { Puppy } = require('./db/models');
 
 // Index of all puppies - DO NOT MODIFY
 app.get('/puppies', async (req, res, next) => {
-    const allPuppies = await Puppy.findAll({order: [['name', 'ASC']]});
+    const allPuppies = await Puppy.findAll({ order: [['name', 'ASC']] });
 
     res.json(allPuppies);
 });
@@ -25,6 +25,27 @@ app.get('/puppies', async (req, res, next) => {
 // Respond to the request by sending a success message
 app.post('/puppies', async (req, res, next) => {
     // Your code here
+    const { name, age_yrs, breed, weight_lbs, microchipped } = req.body
+
+    const newPuppy = await Puppy.create({
+        name: name,
+        age_yrs: age_yrs,
+        weight_lbs: weight_lbs,
+        breed: breed,
+        microchipped: microchipped
+    });
+
+    // const newPuppy = Puppy.build({
+    //     name: name,
+    //     age_yrs: age_yrs,
+    //     weight_lbs: weight_lbs,
+    //     breed: breed,
+    //     microchipped: microchipped
+    // });
+
+    // await newPuppy.save()
+
+    res.json(newPuppy)
 })
 
 
@@ -36,5 +57,5 @@ app.get('/', (req, res) => {
 });
 
 // Set port and listen for incoming requests - DO NOT MODIFY
-const port = 5000;
+const port = 5001;
 app.listen(port, () => console.log('Server is listening on port', port));
