@@ -112,7 +112,18 @@ app.get('/cats/:id/toys', async (req, res, next) => {
 // BONUS STEP: Create an endpoint for GET /data-summary that includes a summary
 // of all the aggregate data according to spec
 // Your code here
-
+app.get('/data-summary', async (req, res, next) => {
+  res.json(
+    await Toy.findAll({
+      attributes:
+          [
+            [sequelize.fn("COUNT", sequelize.col('price')), 'toyCount'],
+            [sequelize.fn("AVG", sequelize.col('price')), 'averageToyPrice'],
+            [sequelize.fn("SUM", sequelize.col('price')), 'totalToyPrice']
+          ]
+    })
+  );
+});
 
 
 // Root route - DO NOT MODIFY
