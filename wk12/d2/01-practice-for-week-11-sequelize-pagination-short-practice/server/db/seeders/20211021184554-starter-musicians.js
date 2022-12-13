@@ -9,9 +9,7 @@ const bandMusicians = [
     musicians: [
       { firstName: 'Adam', lastName: 'Appleby' },
       { firstName: 'Anton', lastName: 'Martinovic' },
-      { firstName: 'Wilson', lastName: 'Holt' },
-      { firstName: 'Wilson', lastName: 'Bolt' },
-      { firstName: 'Bilson', lastName: 'Holt' },
+      { firstName: 'Wilson', lastName: 'Holt' }
     ]
   },
   {
