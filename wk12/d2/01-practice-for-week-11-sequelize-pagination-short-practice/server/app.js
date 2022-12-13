@@ -14,16 +14,32 @@ app.use(express.json());
 
 
 app.get('/musicians', async (req, res, next) => {
-    // Parse the query params, set default values, and create appropriate
+    // Parse the query params,
+    let { page, size } = req.query
+    // set default values,
+    if (!page) page = 1;
+    if (!size) size = 5;
+
+    page = +page;
+    size = parseInt(size);
+    // and create appropriate
+
     // offset and limit values if necessary.
     // Your code here
-    
+    const pagination = {}
+    //positive
+    // 0 = everything
+    if (page >= 1 && size >= 1) {
+        pagination.limit = size;
+        pagination.offset = size * (page - 1)
+    }
+
     // Query for all musicians
     // Include attributes for `id`, `firstName`, and `lastName`
     // Include associated bands and their `id` and `name`
     // Order by musician `lastName` then `firstName`
-    const musicians = await Musician.findAll({ 
-        order: [['lastName'], ['firstName']], 
+    const musicians = await Musician.findAll({
+        order: [['lastName'], ['firstName']],
         attributes: ['id', 'firstName', 'lastName'],
         include: [{
             model: Band,
@@ -32,6 +48,7 @@ app.get('/musicians', async (req, res, next) => {
         // add limit key-value to query
         // add offset key-value to query
         // Your code here
+        ...pagination
     });
 
     res.json(musicians)
@@ -43,13 +60,24 @@ app.get('/bands', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
-    
+
+    let { page, size } = req.query;
+
+    page = (page === undefined) ? 1 : parseInt(page)
+    size = size ? +size : 3
+
+    const pagination = {}
+    if (page > 0 && size > 0) {
+        pagination.limit = size;
+        pagination.offset = size * (page - 1)
+    }
+
     // Query for all bands
     // Include attributes for `id` and `name`
     // Include associated musicians and their `id`, `firstName`, and `lastName`
     // Order by band `name` then musician `lastName`
-    const bands = await Band.findAll({ 
-        order: [['name'], [Musician, 'lastName']], 
+    const bands = await Band.findAll({
+        order: [['name'], [Musician, 'lastName']],
         attributes: ['id', 'name'],
         include: [{
             model: Musician,
@@ -58,6 +86,7 @@ app.get('/bands', async (req, res, next) => {
         // add limit key-value to query
         // add offset key-value to query
         // Your code here
+        ...pagination
     });
 
     res.json(bands)
@@ -69,15 +98,15 @@ app.get('/instruments', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
-    
+
     // Query for all instruments
     // Include attributes for `id` and `type`
     // Include associated musicians and their `id`, `firstName` and `lastName`
     // Omit the MusicianInstruments join table attributes from the results
     // Include each musician's associated band and their `id` and `name`
     // Order by instrument `type`, then band `name`, then musician `lastName`
-    const instruments = await Instrument.findAll({ 
-        order: [['type'], [Musician, Band, 'name'], [Musician, 'lastName']], 
+    const instruments = await Instrument.findAll({
+        order: [['type'], [Musician, Band, 'name'], [Musician, 'lastName']],
         attributes: ['id', 'type'],
         include: [{
             model: Musician,
@@ -109,5 +138,5 @@ app.get('/', (req, res) => {
 });
 
 // Set port and listen for incoming requests - DO NOT MODIFY
-const port = 5000;
+const port = 8080;
 app.listen(port, () => console.log('Server is listening on port', port));
