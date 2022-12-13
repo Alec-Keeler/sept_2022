@@ -14,15 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       // Your code here
       Instrument.belongsToMany(models.Musician, {
         through: models.MusicianInstrument,
-<<<<<<< HEAD
         foreignKey: 'instrumentId',
         otherKey: 'musicianId'
       });
-=======
-        foreignKey: "instrumentId",
-        otherKey: "musicianId"
-      })
->>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
     }
   };
   Instrument.init({

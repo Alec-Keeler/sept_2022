@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       // Your code here
       Musician.belongsTo(models.Band, {
         foreignKey: 'bandId'
-<<<<<<< HEAD
       });
 
       Musician.belongsToMany(models.Instrument, {
@@ -21,15 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'musicianId',
         otherKey: 'instrumentId'
       });
-=======
-      })
-
-      Musician.belongsToMany(models.Instrument, {
-        through: models.MusicianInstrument,
-        foreignKey: "musicianId",
-        otherKey: "instrumentId"
-      })
->>>>>>> 3fd5e66de568f60c716ce247bb48104398145f3d
     }
   };
   Musician.init({
