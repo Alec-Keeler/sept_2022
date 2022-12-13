@@ -39,11 +39,17 @@ app.get('/musicians', async (req, res, next) => {
     // End result: { where: { firstName: req.query.firstName } }
 
     // Your code here
+    if (req.query.firstName) {
+        query.where.firstName = req.query.firstName
+    }
     
     // Add keys to the WHERE clause to match the lastName param, if it exists.
     // End result: { where: { lastName: req.query.lastName } }
     
     // Your code here
+    if (req.query.lastName) {
+        query.where.lastName = req.query.lastName
+    }
 
 
     // STEP 2: WHERE clauses on the associated Band model
@@ -53,6 +59,12 @@ app.get('/musicians', async (req, res, next) => {
     // End result: { include: [{ model: Band, where: { name: req.query.bandName } }] }
 
     // Your code here
+    if (req.query.bandName) {
+        query.include.push({
+            model: Band,
+            where: { name: req.query.bandName } //WHERE Bands.name
+        })
+    }
 
 
     // STEP 3: WHERE Clauses on the associated Instrument model 
@@ -71,6 +83,15 @@ app.get('/musicians', async (req, res, next) => {
     */
 
     // Your code here
+    if (req.query.instrumentTypes.length > 0) {
+        query.include.push({
+            model: Instrument,
+            where: {
+                type: req.query.instrumentTypes
+            },
+            through: { attributes: [] }
+        })
+    }
 
 
     // BONUS STEP 4: Specify Musician attributes to be returned
