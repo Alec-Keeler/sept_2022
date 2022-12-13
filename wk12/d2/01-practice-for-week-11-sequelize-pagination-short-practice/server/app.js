@@ -12,23 +12,30 @@ const { Musician, Band, Instrument } = require('./db/models');
 // Express using json - DO NOT MODIFY
 app.use(express.json());
 
+function pagnate(page = null, size = null) {
+  return { limit: size, offset: (size * (page - 1))}
+}
 
 app.get('/musicians', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
-    
+    let { page, size } = req.query;
+    const pagnation = pagnate(page, size);
+
     // Query for all musicians
     // Include attributes for `id`, `firstName`, and `lastName`
     // Include associated bands and their `id` and `name`
     // Order by musician `lastName` then `firstName`
-    const musicians = await Musician.findAll({ 
-        order: [['lastName'], ['firstName']], 
+    const musicians = await Musician.findAll({
+        order: [['lastName'], ['firstName']],
         attributes: ['id', 'firstName', 'lastName'],
         include: [{
             model: Band,
             attributes: ['id', 'name']
         }],
+        limit: pagnation.limit,
+        offset: pagnation.offset
         // add limit key-value to query
         // add offset key-value to query
         // Your code here
@@ -43,13 +50,14 @@ app.get('/bands', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
-    
+    let { page, size } = req.query;
+    const pagnation = pagnate(page, size);
     // Query for all bands
     // Include attributes for `id` and `name`
     // Include associated musicians and their `id`, `firstName`, and `lastName`
     // Order by band `name` then musician `lastName`
-    const bands = await Band.findAll({ 
-        order: [['name'], [Musician, 'lastName']], 
+    const bands = await Band.findAll({
+        order: [['name'], [Musician, 'lastName']],
         attributes: ['id', 'name'],
         include: [{
             model: Musician,
@@ -58,6 +66,8 @@ app.get('/bands', async (req, res, next) => {
         // add limit key-value to query
         // add offset key-value to query
         // Your code here
+        limit: pagnation.limit,
+        offset: pagnation.offset
     });
 
     res.json(bands)
@@ -69,15 +79,17 @@ app.get('/instruments', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
-    
+    let { page, size } = req.query;
+    const pagnation = pagnate(page, size);
+
     // Query for all instruments
     // Include attributes for `id` and `type`
     // Include associated musicians and their `id`, `firstName` and `lastName`
     // Omit the MusicianInstruments join table attributes from the results
     // Include each musician's associated band and their `id` and `name`
     // Order by instrument `type`, then band `name`, then musician `lastName`
-    const instruments = await Instrument.findAll({ 
-        order: [['type'], [Musician, Band, 'name'], [Musician, 'lastName']], 
+    const instruments = await Instrument.findAll({
+        order: [['type'], [Musician, Band, 'name'], [Musician, 'lastName']],
         attributes: ['id', 'type'],
         include: [{
             model: Musician,
@@ -92,6 +104,8 @@ app.get('/instruments', async (req, res, next) => {
         // add limit key-value to query
         // add offset key-value to query
         // Your code here
+        limit: pagnation.limit,
+        offset: pagnation.offset
     });
 
     res.json(instruments)
