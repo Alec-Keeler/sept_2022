@@ -21,7 +21,7 @@ app.use(express.json());
 app.get('/test-benchmark-logging', async (req, res) => {   // > 100 ms execution time
     const books = await Book.findAll({
         include: [
-            { model: Author }, 
+            { model: Author },
             { model: Review },
             { model: Reviewer }
         ],
@@ -38,12 +38,17 @@ app.get('/books', async (req, res) => {
 
     let books = await Book.findAll({
         include: Author,
+        where: {
+          price: {
+            [Op.lt]: 10
+          }
+        }
     });
 
-    // Filter by price if there is a maxPrice defined in the query params
-    if (req.query.maxPrice) {
-        books = books.filter(book => book.price < parseInt(req.query.maxPrice));
-    };
+    // // Filter by price if there is a maxPrice defined in the query params
+    // if (req.query.maxPrice) {
+    //     books = books.filter(book => book.price < parseInt(req.query.maxPrice));
+    // };
     res.json(books);
 });
 
@@ -51,11 +56,18 @@ app.get('/books', async (req, res) => {
 
         // Record Executed Query and Baseline Benchmark Below:
 
+        // Executed (default): SELECT `Book`.`id`, `Book`.`authorId`, `Book`.`title`, `Book`.`description`, `Book`.`date`, `Book`.`price`, `Book`.`createdAt`, `Book`.`updatedAt`, `Book`.`AuthorId`, `Author`.`id` AS `Author.id`, `Author`.`firstName` AS `Author.firstName`, `Author`.`lastName` AS `Author.lastName`, `Author`.`email` AS `Author.email`, `Author`.`birthdate` AS `Author.birthdate`, `Author`.`createdAt` AS `Author.createdAt`, `Author`.`updatedAt` AS `Author.updatedAt` FROM `Books` AS `Book` LEFT OUTER JOIN `Authors` AS `Author` ON `Book`.`AuthorId` = `Author`.`id`;
+        // Elapsed time: 138ms
+
         // - What is happening in the code of the query itself?
 
+        // joining books and authors and selecting everything
 
-        // - What exactly is happening as SQL executes this query? 
- 
+        // - What exactly is happening as SQL executes this query?
+
+        // scanning books, searching authors with primary key
+
+
 
 
 
@@ -63,29 +75,31 @@ app.get('/books', async (req, res) => {
 
     // - What could make this query more efficient?
 
+    // make js not use filter
 
 // 1c. Refactor the Query in GET /books
 
-
+//done
 
 // 1d. Benchmark the Query after Refactoring
 
-    // Record Executed Query and Baseline Benchmark Below:
+// Record Executed Query and Baseline Benchmark Below:
 
-    // Is the refactored query more efficient than the original? Why or Why Not?
+// Executed (default): SELECT `Book`.`id`, `Book`.`authorId`, `Book`.`title`, `Book`.`description`, `Book`.`date`, `Book`.`price`, `Book`.`createdAt`, `Book`.`updatedAt`, `Book`.`AuthorId`, `Author`.`id` AS `Author.id`, `Author`.`firstName` AS `Author.firstName`, `Author`.`lastName` AS `Author.lastName`, `Author`.`email` AS `Author.email`, `Author`.`birthdate` AS `Author.birthdate`, `Author`.`createdAt` AS `Author.createdAt`, `Author`.`updatedAt` AS `Author.updatedAt` FROM `Books` AS `Book` LEFT OUTER JOIN `Authors` AS `Author` ON `Book`.`AuthorId` = `Author`.`id` WHERE `Book`.`price` < 10; Elapsed time: 40ms
 
+// Is the refactored query more efficient than the original? Why or Why Not?
 
+// yes, much faster, cause is sorting through with where clause, not in
 
 
 
 // STEP #2: Benchmark and Refactor Another Query
 app.patch('/authors/:authorId/books', async (req, res) => {
-    const author = await Author.findOne({
-        include: { model: Book },
-        where: {
-            id: req.params.authorId
-        }
-    });
+  const author = await Author.findOne({
+    where: {
+      id: req.params.authorId
+    }
+  });
 
     if (!author) {
         res.status(404);
@@ -94,16 +108,27 @@ app.patch('/authors/:authorId/books', async (req, res) => {
         });
     }
 
-    for (let book of author.Books) {
-        book.price = req.body.price;
-        await book.save();
-    }
+    // for (let book of author.Books) {
+    //     book.price = req.body.price;
+    //     await book.save();
+    // }
+
+    await Book.update(
+      {
+        price: req.body.price
+      },
+      {
+        where: {
+          authorId: author.id
+        }
+      }
+    )
 
     const books = await Book.findAll({
-        where: {
-            authorId: author.id
-        }
-    });
+      where: {
+        authorId: author.id
+      }
+    })
 
     res.json({
         message: `Successfully updated all authors.`,
@@ -129,7 +154,7 @@ app.get('/reviews', async (req, res) => {
 
     const reviews = await Review.findAll({
         include: {
-            model: Reviewer, 
+            model: Reviewer,
             where: whereClause,
             attributes: ['firstName', 'lastName']
         },
